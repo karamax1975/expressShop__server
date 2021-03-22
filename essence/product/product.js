@@ -1,4 +1,3 @@
-const { json } = require('body-parser');
 const productModel = require('../models/product');
 const categoryModel = require('../models/category');
 const path = require('path');
@@ -28,6 +27,8 @@ class Product {
       preview: 'previewImg.svg',
       previews: ['previewsImg.svg'],
     }
+
+
     const find = await productModel.findOne({ name: templateProduct.name });
     if (!find) {
       const newProduct = new productModel(templateProduct);
@@ -115,7 +116,7 @@ class Product {
   }
 
   async createProduct(req) {
-    const { name, autor, shortDescription, description, prise, brand, category, preview, previews, details, promotion } = req;
+    const { name, autor, shortDescription, description, price, brand, category, preview, previews, details, promotion } = req;
     const find = await productModel.findOne({ name });
 
     if (!find) {
@@ -124,7 +125,7 @@ class Product {
         autor,
         shortDescription,
         description,
-        prise,
+        price,
         brand,
         activity: true,
         date: Date.now(),

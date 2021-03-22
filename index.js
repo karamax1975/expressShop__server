@@ -7,13 +7,13 @@ const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser');
 const config = require('./config');
 
-// const DBURL = 'mongodb+srv://max:German2002@cluster0.7ncft.mongodb.net/products';
 app.use(bodyParser.json())
 app.use("/public", express.static(__dirname + "/public"));
 app.use('/api/', cookieParser(), require('./routers/api/users_routers'));
 app.use('/api/', require('./routers/api/product_routers'))
 app.use('/api/', require('./routers/api/category_routers'));
-app.use('/api/', require('./routers/api/choice_routers'))
+app.use('/api/', require('./routers/api/choice_routers'));
+app.use('/api/', require('./routers/api/catalog_routers'));
 
 
 

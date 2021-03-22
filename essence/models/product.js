@@ -4,7 +4,7 @@ const schema = new Schema({
   name: { type: String, required: true, unique: true },
   shortDescription: { type: String, required: true },
   description: { type: String, required: true },
-  prise: { type: Number, required: true },
+  price: { type: Number, required: true },
   brand: { type: String, required: true },
   activity: { type: Boolean, required: true },
   autor: { type: Types.ObjectId, ref: 'users' },
