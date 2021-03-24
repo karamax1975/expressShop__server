@@ -14,13 +14,15 @@ class Catalog {
     const rezult = await newCatalogItem.save();
     if (rezult) return rezult
     else return false
-    // const find = await catalogModel.findOne({ name });
-    // if (!find) {
-    //   const newCatalogItem = new catalogModel({ name, parent })
-    //   return await newCatalogItem.save();
-    // }
-    // else return false
   }
+  async renamePosition(req) {
+    const { id, newName } = req;
+    const childrens = await catalogModel.updateMany({ 'parent.id': id }, { $set: { 'parent.name': newName } });
+    const obj = await catalogModel.updateOne({ _id: id }, { $set: { name: newName } });
+    if (obj.ok) return true
+    else return false
+  }
+
   async delPosition(req) {
     const { id } = req;
     const find = await catalogModel.find({ 'parent.id': id });
