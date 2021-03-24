@@ -10,12 +10,16 @@ class Catalog {
 
   async createPosition(req) {
     let { name, parent } = req;
-    const find = await catalogModel.findOne({ name });
-    if (!find) {
-      const newCatalogItem = new catalogModel({ name, parent })
-      return await newCatalogItem.save();
-    }
+    const newCatalogItem = new catalogModel({ name, parent })
+    const rezult = await newCatalogItem.save();
+    if (rezult) return rezult
     else return false
+    // const find = await catalogModel.findOne({ name });
+    // if (!find) {
+    //   const newCatalogItem = new catalogModel({ name, parent })
+    //   return await newCatalogItem.save();
+    // }
+    // else return false
   }
   async delPosition(req) {
     const { id } = req;
