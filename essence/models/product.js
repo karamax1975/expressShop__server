@@ -9,7 +9,7 @@ const schema = new Schema({
   activity: { type: Boolean, required: true },
   autor: { type: Types.ObjectId, ref: 'users' },
   date: { type: Date, required: true },
-  category: [{ id: { type: Types.ObjectId, ref: 'products' }, name: { type: String, required: true } }],
+  category: { id: { type: Types.ObjectId, ref: 'catalogs' }, name: { type: String, required: true } },
   preview: { type: String, required: true },
   previews: [{ type: String, required: true }],
   details: [{
@@ -18,7 +18,7 @@ const schema = new Schema({
   }],
   promotion: {
     discount: Number, required: false,
-    promo: [{ type: Types.ObjectId, ref: 'promotions' }]
+    promo: [{ id: { type: Types.ObjectId, ref: 'promotions' }, name: { type: String } }]
   }
 })
 module.exports = model('Product', schema)

@@ -7,42 +7,6 @@ const fs = require('fs')
 
 class Product {
 
-
-
-
-  async findTemplate(userId) {
-
-    const templateProduct = {
-      name: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ligula nunc aliquet maecenas tellus placerat purus.',
-      shortDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nec curabitur euismod et, elementum congue enim commodo mattis et. Commodo morbi amet, lacinia dignissim lacus. Ligula nunc aliquet maecenas tellus placerat purus suspendisse.',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Scelerisque faucibus ante dictumst tellus tempus faucibus habitasse viverra placerat. Et semper adipiscing at eget at. Fusce nulla hac nunc felis, libero eget lectus imperdiet pellentesque. Nibh morbi ut phasellus id dictum consequat, gravida. Eget sit sed eros, sed quis arcu, aliquam. Nec netus metus sem tellus sit ipsum. Tortor, lobortis pellentesque mattis nibh pharetra, ut. Facilisis in cursus morbi eu. Massa ultrices dui aenean vivamus cursus erat. Sed rhoncus, nisl adipiscing urna odio viverra ac nibh. Vel adipiscing magna natoque aliquam aliquam cras sapien, aliquam elit. Quam sit urna, a egestas. Sit nisi, sapien, aliquam cursus lectus. Elementum at augue enim lorem tristique dignissim varius libero. Velit sit ipsum nunc, odio elit auctor eleifend tincidunt nunc. Sit suspendisse varius id pellentesque eget eu. Malesuada rhoncus mi tincidunt hac justo. Mauris sed dictum tincidunt euismod vulputate mauris, mauris. Mattis ut neque tempus, posuere nunc. Sit libero purus nec vel orci, lacus. Habitasse sit elementum arcu sed. Quam rhoncus enim porttitor in laoreet ullamcorper malesuada arcu. Platea viverra gravida auctor aliquam sed leo at nec, iaculis. Arcu at lacinia varius phasellus sapien.',
-      prise: 999.99,
-      date: Date.now(),
-      brand: 'Samsung',
-      activity: true,
-      autor: userId,
-      details: [{ name: 'Name:', description: 'Description:' }],
-      // category: 'Template',
-      category: { id: '5ff8bf24e349a00508da152e', name: 'Template' },
-      preview: 'previewImg.svg',
-      previews: ['previewsImg.svg'],
-    }
-
-
-    const find = await productModel.findOne({ name: templateProduct.name });
-    if (!find) {
-      const newProduct = new productModel(templateProduct);
-      const template = await newProduct.save();
-      return {
-        template,
-        findTemplate: false
-      }
-    }
-    else return {
-      find,
-      findTemplate: true
-    }
-  }
   async getListAllProducts() {
     // Задача: выбрать массив товаров, кроме шаблонного товара.
     // нахожу категорию "Шаблон"
@@ -94,8 +58,16 @@ class Product {
   }
   async updateProduct(product) {
     const change = await productModel.findOne({ _id: product._id }).replaceOne(product);
-    if (change.ok) return true
+    if (change.ok) {
+      const upProduct = await productModel.findOne({ _id: product._id });
+      return upProduct
+    }
     else return false
+  }
+  async changeCategoryProduct(data) {
+    const { id, newName } = data;
+    const update = await productModel.updateMany({ 'category.id': id }, { $set: { 'category.name': newName } });
+    if (update.ok) return true
   }
 
   async deleteProduct(id, name) {
@@ -113,6 +85,14 @@ class Product {
     }
     else return false
 
+  }
+  async deleteProducts(data) {
+    const { id, filter } = data;
+    const result = await productModel.find({ [filter]: id });
+    result.forEach(item => {
+      if (item) this.deleteProduct(item._id, item.autor)
+    })
+    return true
   }
 
   async createProduct(req) {

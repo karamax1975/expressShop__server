@@ -19,15 +19,6 @@ router.post('/deleteImg', async (req, res) => {
   else res.send({ status: false })
 })
 
-
-router.post('/findTemplate', async (req, res) => {
-  const rezult = await product.findTemplate(req.body.id)
-  if (rezult) {
-    res.status(200).json({ template: rezult })
-  }
-  else res.status(400).json({ message: 'Ops', template: false })
-})
-
 // -------------------------------------------------------------------------------
 
 router.get('/getListAllProducts', async (req, res) => {
@@ -37,11 +28,6 @@ router.get('/getListAllProducts', async (req, res) => {
     else res.status(400).json({ message: 'Ops...' })
   })
 })
-
-// router.put('/reloadImg', fileUpload(), async (req, res) => {
-//   console.log(req.body);
-//   res.send({ message: 'ok' })
-// })
 
 router.post('/product', fileUpload(), async (req, res) => {
   const { name, autor, category, preview } = req.body
@@ -61,6 +47,7 @@ router.post('/product', fileUpload(), async (req, res) => {
 // ----------------------------------------------------------------------------
 
 router.post('/createProduct', async (req, res) => {
+  console.log(req.body.data);
   const newProduct = await product.createProduct(req.body.data);
   if (newProduct) res.send({ status: true, newProduct });
   else res.send({ status: false })
@@ -80,9 +67,9 @@ router.delete('/deleteProduct', async (req, res) => {
 })
 router.put('/updateProduct', async (req, res) => {
   // const { id, obj } = req.body.data;
-  const rezult = await product.updateProduct(req.body.data)
-  if (rezult) {
-    res.send({ status: true })
+  const result = await product.updateProduct(req.body.data)
+  if (result) {
+    res.send({ status: true, result })
   }
   else res.send({ status: false })
 

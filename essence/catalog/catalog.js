@@ -25,12 +25,9 @@ class Catalog {
 
   async delPosition(req) {
     const { id } = req;
-    const find = await catalogModel.find({ 'parent.id': id });
-    if (find.length > 0) {
-      catalogModel.deleteMany({ 'parent.id': id });
-    }
+    const arrDelItem = await catalogModel.deleteMany({ 'parent.id': id });
     const delItem = await catalogModel.deleteOne({ _id: id })
-    if (delItem) return true;
+    if (delItem || delItem && arrDelItem) return true;
     else return false
   }
 }
